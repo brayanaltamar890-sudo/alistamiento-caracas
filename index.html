@@ -1,420 +1,524 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Alistamiento Militar FANB - Caracas</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --bg-dark: #22252a;
-            --card-bg: #2d3139;
-            --text-light: #f8fafc;
-            --text-muted: #cbd5e1;
-            --accent-green: #22c55e;
-            --accent-blue: #2563eb;
-            --accent-red: #dc2626;
-            --border-color: #3f444e;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alistamiento Militar Caracas - FANB</title>
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --primary-color: #1b365d;
+      --secondary-color: #2c5282;
+      --accent-color: #d69e2e;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+      --error-color: #ef4444;
+      --success-color: #22c55e;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            padding: 20px 12px;
-        }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 10px;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-        }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
 
-        .hero-img {
-            width: 100%;
-            border-radius: 16px;
-            object-fit: cover;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        }
+    header h1 {
+      font-size: 1.8rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 24px 0 12px;
-            color: #ffffff;
-        }
+    /* CARRUSEL DE DIAPOSITIVAS MILITARES */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      height: 220px;
+      margin: 15px auto 25px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
 
-        ul li {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
+    .carousel-slide.active {
+      opacity: 1;
+    }
 
-        .divider {
-            height: 1px;
-            background-color: var(--border-color);
-            margin: 28px 0;
-            border: none;
-        }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        /* Formulario de Supabase */
-        .auth-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px 20px;
-            margin: 24px 0;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
+    .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      padding: 8px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
 
-        .auth-card h2 {
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 6px;
-            color: #ffffff;
-        }
+    /* CONTENEDOR DE FORMULARIOS */
+    .form-container {
+      background-color: var(--card-bg);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 25px 20px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
 
-        .auth-card p.subtitle {
-            font-size: 13px;
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
+    .form-container h2 {
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: 5px;
+    }
 
-        .form-group {
-            margin-bottom: 14px;
-        }
+    .form-container .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
 
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
+    .alert {
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+      display: none;
+      text-align: center;
+    }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: #1e2126;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-        }
+    .alert-error {
+      background-color: rgba(239, 68, 68, 0.2);
+      border: 1px solid var(--error-color);
+      color: #fca5a5;
+    }
 
-        .form-group input:focus {
-            border-color: var(--accent-blue);
-        }
+    .alert-success {
+      background-color: rgba(34, 197, 94, 0.2);
+      border: 1px solid var(--success-color);
+      color: #86efac;
+    }
 
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 10px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        .btn-blue { background-color: var(--accent-blue); color: white; }
-        .btn-green { background-color: var(--accent-green); color: white; }
-        .btn-red { background-color: var(--accent-red); color: white; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 10px;
-            font-size: 13px;
-        }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      outline: none;
+    }
 
-        .hidden { display: none; }
+    .form-group input:focus {
+      border-color: var(--secondary-color);
+    }
 
-        .alert {
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 14px;
-            text-align: center;
-            display: none;
-        }
-        .alert-error { background-color: #7f1d1d; color: #fecaca; }
-        .alert-success { background-color: #14532d; color: #bbf7d0; }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        .footer-text {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 30px;
-        }
-    </style>
+    .btn-primary {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+    }
+
+    .toggle-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .toggle-link:hover {
+      color: var(--text-light);
+    }
+
+    /* VISTA DE SESIÓN INICIADA */
+    .dashboard-view {
+      display: none;
+      text-align: center;
+      background-color: var(--card-bg);
+      padding: 30px 20px;
+      border-radius: 12px;
+      max-width: 450px;
+      width: 100%;
+      border: 1px solid #334155;
+    }
+
+    .dashboard-view h2 {
+      color: var(--success-color);
+      margin-bottom: 10px;
+    }
+
+    .dashboard-view p {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .info-list {
+      text-align: left;
+      background: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .info-list p {
+      margin-bottom: 8px;
+      color: var(--text-light);
+    }
+
+    .btn-logout {
+      background-color: #dc2626;
+      color: white;
+    }
+
+    /* REQUISITOS Y BENEFICIOS */
+    .info-section {
+      max-width: 500px;
+      width: 100%;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .info-section h3 {
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .info-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-section li {
+      margin-bottom: 6px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Imagen Principal de la FANB -->
-        <img src="https://images.unsplash.com/photo-1579912437766-7883236ef06e?q=80&w=800&auto=format&fit=crop" alt="Alistamiento Militar FANB" class="hero-img">
+  <header>
+    <h1>Alistamiento Militar Caracas</h1>
+    <p>Proceso de Convocatoria y Registro de Alistados FANB</p>
+  </header>
 
-        <h1>Registro de Alistamiento Militar FANB – Caracas</h1>
+  <!-- CARRUSEL DE IMÁGENES MILITARES -->
+  <div class="carousel-container">
+    <div class="carousel-slide active">
+      <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80" alt="Instrucción Militar">
+      <div class="carousel-caption">Instrucción y Formación Profesional</div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1579912437766-78923055415d?auto=format&fit=crop&w=800&q=80" alt="Entrenamiento Militar">
+      <div class="carousel-caption">Disciplina, Lealtad y Honor</div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1580130775562-0ef92da028de?auto=format&fit=crop&w=800&q=80" alt="Servicio a la Patria">
+      <div class="carousel-caption">Sirve a la Patria en la ZODI Caracas</div>
+    </div>
+  </div>
 
-        <ul>
-            <li>• Ser venezolano(a) de nacimiento.</li>
-            <li>• Cédula de identidad laminada.</li>
-            <li>• Edad comprendida entre 18 y 30 años.</li>
-            <li>• Soltero(a).</li>
-            <li>• No poseer antecedentes penales.</li>
-            <li>• Presentar pruebas de aptitud física y médica.</li>
-        </ul>
+  <!-- SECCIÓN DE FORMULARIOS -->
+  <div class="form-container" id="auth-box">
+    
+    <!-- MENSAJES DE ESTADO -->
+    <div id="alert-msg" class="alert"></div>
 
-        <!-- Formulario de Registro e Inicio de Sesión Supabase -->
-        <div class="auth-card">
-            <h2 id="form-title">Registro de Alistados</h2>
-            <p class="subtitle" id="form-subtitle">Ingresa tus datos para registrarte en el sistema de alistamiento</p>
+    <!-- FORMULARIO DE INICIO DE SESIÓN -->
+    <form id="login-form">
+      <h2>Iniciar Sesión</h2>
+      <p class="subtitle">Accede con tu cuenta de alistado</p>
+      
+      <div class="form-group">
+        <label for="login-email">Correo Electrónico</label>
+        <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
+      </div>
 
-            <div id="alert-box" class="alert"></div>
+      <div class="form-group">
+        <label for="login-password">Contraseña</label>
+        <input type="password" id="login-password" placeholder="••••••••" required>
+      </div>
 
-            <div id="user-dashboard" class="hidden">
-                <h3 style="color: #ffffff; text-align: center; margin-bottom: 8px;">¡Registro de Alistado Exitoso!</h3>
-                <p id="user-info" style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 16px;"></p>
-                <button onclick="logout()" class="btn btn-red">Cerrar Sesión</button>
-            </div>
+      <button type="submit" class="btn btn-primary">Ingresar al Sistema</button>
+      <span class="toggle-link" onclick="toggleAuthMode('register')">¿No tienes cuenta? Regístrate aquí</span>
+    </form>
 
-            <form id="register-form" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Cédula de Identidad</label>
-                    <input type="text" id="reg-cedula" placeholder="V-12345678" required>
-                </div>
-                <div class="form-group">
-                    <label>Nombre y Apellido</label>
-                    <input type="text" id="reg-name" placeholder="Nombre Completo" required>
-                </div>
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="reg-password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-blue" id="btn-reg">Crear Cuenta de Alistado</button>
-            </form>
+    <!-- FORMULARIO DE REGISTRO DE ALISTADO -->
+    <form id="register-form" style="display: none;">
+      <h2>Registro de Alistado</h2>
+      <p class="subtitle">Ingresa tus datos para iniciar la inscripción</p>
 
-            <form id="login-form" class="hidden" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="login-password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-blue" id="btn-login">Ingresar al Sistema</button>
-            </form>
+      <div class="form-group">
+        <label for="reg-cedula">Cédula de Identidad</label>
+        <input type="text" id="reg-cedula" placeholder="V-12345678" required>
+      </div>
 
-            <div style="margin-top: 16px; text-align: center;" id="toggle-box">
-                <button type="button" class="btn btn-outline" id="btn-switch" onclick="toggleAuth()">¿Ya tienes cuenta? Iniciar Sesión</button>
-            </div>
-        </div>
+      <div class="form-group">
+        <label for="reg-fullname">Nombre Completo</label>
+        <input type="text" id="reg-fullname" placeholder="Nombres y Apellidos" required>
+      </div>
 
-        <p style="font-size: 14px; color: var(--text-muted); margin: 20px 0;">
-            <strong>Proceso de Registro y Convocatoria de Alistados.</strong><br>
-            Sirve a la Patria y forma parte del contingente militar. Revisa los requisitos e inscríbete para iniciar tu proceso de selección.
-        </p>
+      <div class="form-group">
+        <label for="reg-phone">Número de Teléfono</label>
+        <input type="tel" id="reg-phone" placeholder="04121234567" required>
+      </div>
 
-        <hr class="divider">
+      <div class="form-group">
+        <label for="reg-email">Correo Electrónico</label>
+        <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
+      </div>
 
-        <div class="section-title">Beneficios del contingente:</div>
-        <ul>
-            <li>🎓 Oportunidades de estudio universitario y formación técnica.</li>
-            <li>🩺 Asistencia médica, odontológica y social integral.</li>
-            <li>🏅 Posibilidad de carrera dentro de la Fuerza Armada Nacional Bolivariana.</li>
-            <li>🥖 Ración alimenticia y dotación de prendas de vestir.</li>
-            <li>💰 Asignación mensual (bonificación).</li>
-        </ul>
+      <div class="form-group">
+        <label for="reg-password">Contraseña</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required minlength="6">
+      </div>
 
-        <hr class="divider">
+      <button type="submit" class="btn btn-primary">Registrar Alistado</button>
+      <span class="toggle-link" onclick="toggleAuthMode('login')">¿Ya tienes cuenta? Inicia Sesión</span>
+    </form>
 
-        <div class="section-title">🎖️ MODALIDADES DE SERVICIO</div>
-        <ul>
-            <li>🔹 <strong>Tiempo Completo (Servicio Regular):</strong> Permanencia continua dentro de las instalaciones militares con alojamiento, alimentación y formación integral.</li>
-            <br>
-            <li>🔹 <strong>Tiempo Parcial:</strong> Opción especial para quienes estudian en la universidad o trabajan, permitiendo cumplir el servicio militar sin interrumpir sus estudios.</li>
-        </ul>
+  </div>
 
-        <hr class="divider">
-
-        <div class="section-title">📍 PUNTO DE ATENCIÓN Y REGISTRO</div>
-        <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 6px;">
-            Academia Militar del Ejército Bolivariano<br>
-            Caracas, Distrito Capital.
-        </p>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
-            Horario de atención: Lunes a Viernes de 08:00 a.m. a 04:00 p.m.
-        </p>
-
-        <hr class="divider">
-
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
-            Al tocar el botón de abajo, envía por WhatsApp...
-        </p>
-
-        <a href="https://wa.me/584120000000?text=Hola,%20deseo%20mas%20informacion%20sobre%20el%20alistamiento" class="btn btn-green">
-            Pre-inscribirme por WhatsApp
-        </a>
-
-        <a href="tel:+584120000000" class="btn btn-red">
-            📞 Llamar al Centro de Atención
-        </a>
-
-        <p class="footer-text">( Made with Carrd )</p>
+  <!-- PANEL DE BIENVENIDA (USUARIO LOGUEADO) -->
+  <div class="dashboard-view" id="dashboard-box">
+    <h2>¡Registro Confirmado!</h2>
+    <p>Bienvenido al Sistema de Alistamiento Militar Caracas.</p>
+    
+    <div class="info-list">
+      <p><strong>Cédula:</strong> <span id="user-cedula">-</span></p>
+      <p><strong>Nombre:</strong> <span id="user-name">-</span></p>
+      <p><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
+      <p><strong>Correo:</strong> <span id="user-email">-</span></p>
     </div>
 
-    <script>
-        const SUPABASE_URL = "https://hjvftsxciwmnbfqgkhpi.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_pr45DPbI4ylLwW9xO20aaw_eYufxpOw";
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <button onclick="logout()" class="btn btn-logout">Cerrar Sesión</button>
+  </div>
 
-        let isLogin = false;
+  <!-- INFORMACIÓN ADICIONAL -->
+  <div class="info-section">
+    <h3>Beneficios del Contingente</h3>
+    <ul>
+      <li>🎓 Oportunidades de estudio universitario y técnico.</li>
+      <li>🩺 Asistencia médica, odontológica y social integral.</li>
+      <li>🎖️ Posibilidad de hacer carrera dentro de la Fuerza Armada.</li>
+    </ul>
+  </div>
 
-        function showAlert(message, type) {
-            const box = document.getElementById('alert-box');
-            box.innerText = message;
-            box.className = `alert alert-${type}`;
-            box.style.display = 'block';
-        }
+  <script>
+    // CONFIGURACIÓN DE SUPABASE
+    const SUPABASE_URL = 'https://hjvftsxciwmnbfqgkhpi.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqdmZ0c3hjaXdtbmJmcWdraHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTUzNjksImV4cCI6MjA1Nzg5MTM2OX0.J_M63b6knd-2C_-LwIuM4I8mP2d5w2-f-S6A2I0S6f4'; // Reemplazar si fuera necesario
+    
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        function hideAlert() {
-            document.getElementById('alert-box').style.display = 'none';
-        }
+    // LÓGICA DEL CARRUSEL DE IMÁGENES
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
 
-        function toggleAuth() {
-            isLogin = !isLogin;
-            hideAlert();
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            const title = document.getElementById('form-title');
-            const subtitle = document.getElementById('form-subtitle');
-            const switchBtn = document.getElementById('btn-switch');
+    function nextSlide() {
+      if (slides.length === 0) return;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+    setInterval(nextSlide, 3500);
 
-            if (isLogin) {
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-                title.innerText = "Iniciar Sesión";
-                subtitle.innerText = "Accede con tu cuenta de alistado";
-                switchBtn.innerText = "¿No tienes cuenta? Regístrate aquí";
-            } else {
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-                title.innerText = "Registro de Alistados";
-                subtitle.innerText = "Ingresa tus datos para registrarte en el sistema de alistamiento";
-                switchBtn.innerText = "¿Ya tienes cuenta? Iniciar Sesión";
+    // ELEMENTOS DEL DOM
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const authBox = document.getElementById('auth-box');
+    const dashboardBox = document.getElementById('dashboard-box');
+    const alertMsg = document.getElementById('alert-msg');
+
+    // NAVEGACIÓN ENTRE INICIAR SESIÓN Y REGISTRO
+    function toggleAuthMode(mode) {
+      hideAlert();
+      if (mode === 'register') {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      } else {
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+      }
+    }
+
+    function showAlert(message, isError = true) {
+      alertMsg.textContent = message;
+      alertMsg.className = `alert ${isError ? 'alert-error' : 'alert-success'}`;
+      alertMsg.style.display = 'block';
+    }
+
+    function hideAlert() {
+      alertMsg.style.display = 'none';
+    }
+
+    // REGISTRO DE USUARIO
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const cedula = document.getElementById('reg-cedula').value.trim();
+      const fullname = document.getElementById('reg-fullname').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              cedula: cedula,
+              full_name: fullname,
+              phone_number: phone
             }
+          }
+        });
+
+        if (error) throw error;
+
+        showAlert('¡Registro exitoso! Iniciando sesión...', false);
+        
+        // Si el usuario se crea y se confirma automáticamente
+        if (data.user) {
+          checkSession();
         }
 
-        async function handleRegister(e) {
-            e.preventDefault();
-            hideAlert();
+      } catch (err) {
+        showAlert(err.message || 'Error al registrar alistado');
+      }
+    });
 
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-            const name = document.getElementById('reg-name').value;
-            const cedula = document.getElementById('reg-cedula').value;
+    // INICIO DE SESIÓN
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
 
-            document.getElementById('btn-reg').innerText = "Procesando...";
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
 
-            const { data, error } = await _supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        full_name: name,
-                        cedula: cedula
-                    }
-                }
-            });
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
-            document.getElementById('btn-reg').innerText = "Crear Cuenta de Alistado";
+        if (error) throw error;
 
-            if (error) {
-                showAlert("Error en registro: " + error.message, 'error');
-            } else {
-                showAlert("¡Registro completado exitosamente!", 'success');
-            }
-        }
+        checkSession();
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            hideAlert();
+      } catch (err) {
+        showAlert(err.message || 'Error al iniciar sesión');
+      }
+    });
 
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+    // VERIFICAR SESIÓN ACTIVA
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        const user = session.user;
+        const metadata = user.user_metadata || {};
 
-            document.getElementById('btn-login').innerText = "Verificando...";
+        document.getElementById('user-email').textContent = user.email || '-';
+        document.getElementById('user-cedula').textContent = metadata.cedula || 'No registrada';
+        document.getElementById('user-name').textContent = metadata.full_name || 'Alistado';
+        document.getElementById('user-phone').textContent = metadata.phone_number || 'No registrado';
 
-            const { data, error } = await _supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+        authBox.style.display = 'none';
+        dashboardBox.style.display = 'block';
+      } else {
+        authBox.style.display = 'block';
+        dashboardBox.style.display = 'none';
+      }
+    }
 
-            document.getElementById('btn-login').innerText = "Ingresar al Sistema";
+    // CERRAR SESIÓN
+    async function logout() {
+      await supabase.auth.signOut();
+      checkSession();
+    }
 
-            if (error) {
-                showAlert("Error de acceso: " + error.message, 'error');
-            } else {
-                showDashboard(data.user);
-            }
-        }
-
-        function showDashboard(user) {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('toggle-box').classList.add('hidden');
-            document.getElementById('form-title').innerText = "Panel del Alistado";
-            document.getElementById('form-subtitle').innerText = "Estatus de alistamiento activo";
-            
-            const userName = user.user_metadata.full_name || user.email;
-            document.getElementById('user-info').innerText = `Bienvenido(a), ${userName}.`;
-            document.getElementById('user-dashboard').classList.remove('hidden');
-        }
-
-        async function logout() {
-            await _supabase.auth.signOut();
-            location.reload();
-        }
-    </script>
+    // COMPROBAR SESIÓN AL CORTAR / CARGAR PÁGINA
+    checkSession();
+  </script>
 </body>
 </html>
