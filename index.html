@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Aspirantes - Alistamiento Militar Caracas</title>
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-dark: #1e40af;
+            --bg-dark: #0f172a;
+            --card-bg: #ffffff;
+            --text: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, var(--bg-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            padding: 32px 28px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .brand-header {
+            margin-bottom: 24px;
+        }
+
+        .brand-logo {
+            width: 64px;
+            height: 64px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .brand-header h1 {
+            font-size: 22px;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .brand-header p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        .toggle-container {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-toggle {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="brand-header">
+            <div class="brand-logo">FANB</div>
+            <h1 id="form-title">Iniciar Sesión</h1>
+            <p id="form-subtitle">Bienvenido al sistema de registro de aspirantes</p>
+        </div>
+
+        <!-- Formulario de Iniciar Sesión -->
+        <form id="login-form">
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">Ingresar al Sistema</button>
+        </form>
+
+        <!-- Formulario de Registro -->
+        <form id="register-form" class="hidden">
+            <div class="form-group">
+                <label>Cédula de Identidad</label>
+                <input type="text" id="reg-cedula" placeholder="V-12345678" required>
+            </div>
+            <div class="form-group">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="reg-name" placeholder="Juan Pérez" required>
+            </div>
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="reg-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">Crear Cuenta de Aspirante</button>
+        </form>
+
+        <div class="toggle-container">
+            <p id="toggle-text" style="font-size: 13px; color: #64748b;">¿Eres un nuevo aspirante?</p>
+            <button type="button" class="btn-toggle" id="btn-switch" onclick="toggleAuth()">Crear Cuenta de Aspirante</button>
+        </div>
+    </div>
+
+    <script>
+        let isLogin = true;
+
+        function toggleAuth() {
+            isLogin = !isLogin;
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const title = document.getElementById('form-title');
+            const switchBtn = document.getElementById('btn-switch');
+
+            if (isLogin) {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                title.innerText = "Iniciar Sesión";
+                switchBtn.innerText = "Crear Cuenta de Aspirante";
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                title.innerText = "Registro de Aspirante";
+                switchBtn.innerText = "Ya tengo cuenta (Iniciar Sesión)";
+            }
+        }
+    </script>
+</body>
+</html>
