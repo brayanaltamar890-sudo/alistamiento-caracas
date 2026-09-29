@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Alistamiento Militar FANB - Caracas</title>
 
-    <!-- METATAGS PARA VISTA PREVIA EN WHATSAPP Y REDES SOCIALES -->
+    <!-- METATAGS DE METADATOS PARA VISTA PREVIA EN WHATSAPP -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Registro de Alistamiento Militar FANB - Caracas">
-    <meta property="og:description" content="Inscríbete en el Registro de Alistamiento Militar en Caracas. Revisa los requisitos, beneficios y completa tu registro aquí.">
+    <meta property="og:title" content="Registro de Alistamiento Militar FANB – Caracas">
+    <meta property="og:description" content="Inscríbete en el Registro de Alistamiento Militar en Caracas. Revisa requisitos y beneficios aquí.">
     <meta property="og:image" content="https://hjvftsxciwmnbfqgkhpi.supabase.co/storage/v1/object/public/imagenes/Screenshot_20260929_013514_Chrome.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://alistamiento-caracas.vercel.app">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -189,8 +192,8 @@
             font-size: 12px;
             color: #64748b;
             margin-top: 30px;   
-            
         }
+
         .carousel-container {
             width: 100%;
             max-height: 260px;
@@ -220,7 +223,6 @@
 <body>
 
     <div class="container">
-        <!-- Imagen Principal de la FANB -->
         <!-- Carrusel de Imágenes -->
         <div class="carousel-container">
             <div class="carousel-slide">
@@ -399,7 +401,6 @@
             const cedula = document.getElementById('reg-cedula').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
 
-            // Validación estricta del número de teléfono
             if (!phone || phone.length < 10) {
                 showAlert("Por favor ingresa un número de teléfono válido (mínimo 10 dígitos).", 'error');
                 return;
@@ -468,12 +469,11 @@
             location.reload();
         }
 
-        // Lógica para que el carrusel se mueva solo
         const carouselSlide = document.querySelector('.carousel-slide');
         const images = document.querySelectorAll('.carousel-slide img');
 
         let counter = 0;
-        const intervalTime = 5000; // Cambia de foto cada 5 segundos
+        const intervalTime = 5000;
 
         setInterval(() => {
             counter++;
