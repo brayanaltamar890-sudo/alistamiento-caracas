@@ -4,19 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alistamiento Militar Caracas - FANB</title>
-  <!-- Supabase JS CDN -->
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --primary-color: #1b365d;
-      --secondary-color: #2c5282;
-      --accent-color: #d69e2e;
       --bg-dark: #0f172a;
       --card-bg: #1e293b;
+      --accent-gold: #d69e2e;
+      --btn-blue: #2563eb;
       --text-light: #f8fafc;
       --text-muted: #94a3b8;
-      --error-color: #ef4444;
-      --success-color: #22c55e;
+      --error-red: #ef4444;
+      --success-green: #22c55e;
     }
 
     * {
@@ -33,39 +32,39 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 20px 10px;
+      padding: 20px 12px;
     }
 
     header {
       text-align: center;
       margin-bottom: 20px;
-      max-width: 800px;
+      max-width: 500px;
     }
 
     header h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       color: var(--text-light);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     header p {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
-    /* CARRUSEL DE DIAPOSITIVAS MILITARES */
+    /* CARRUSEL TIPO DIAPOSITIVAS */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 500px;
-      height: 220px;
-      margin: 15px auto 25px auto;
+      max-width: 450px;
+      height: 240px;
+      margin-bottom: 20px;
       overflow: hidden;
       border-radius: 12px;
       border: 2px solid #334155;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     }
 
     .carousel-slide {
@@ -75,7 +74,7 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 0.8s ease-in-out;
     }
 
     .carousel-slide.active {
@@ -88,44 +87,32 @@
       object-fit: cover;
     }
 
-    .carousel-caption {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background: rgba(15, 23, 42, 0.75);
-      padding: 8px;
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-light);
-      font-weight: 500;
-    }
-
-    /* CONTENEDOR DE FORMULARIOS */
+    /* CONTENEDOR PRINCIPAL */
     .form-container {
       background-color: var(--card-bg);
       border: 1px solid #334155;
       border-radius: 12px;
-      padding: 25px 20px;
+      padding: 24px 18px;
       width: 100%;
       max-width: 450px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
     .form-container h2 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       text-align: center;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
-    .form-container .subtitle {
+    .subtitle {
       text-align: center;
       color: var(--text-muted);
       font-size: 0.85rem;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .alert {
-      padding: 10px 12px;
+      padding: 10px;
       border-radius: 6px;
       font-size: 0.85rem;
       margin-bottom: 15px;
@@ -135,25 +122,25 @@
 
     .alert-error {
       background-color: rgba(239, 68, 68, 0.2);
-      border: 1px solid var(--error-color);
+      border: 1px solid var(--error-red);
       color: #fca5a5;
     }
 
     .alert-success {
       background-color: rgba(34, 197, 94, 0.2);
-      border: 1px solid var(--success-color);
+      border: 1px solid var(--success-green);
       color: #86efac;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
       display: block;
       font-size: 0.85rem;
       color: var(--text-muted);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .form-group input {
@@ -168,7 +155,7 @@
     }
 
     .form-group input:focus {
-      border-color: var(--secondary-color);
+      border-color: var(--btn-blue);
     }
 
     .btn {
@@ -179,38 +166,30 @@
       font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s;
+      margin-top: 6px;
     }
 
     .btn-primary {
-      background-color: #2563eb;
+      background-color: var(--btn-blue);
       color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: #1d4ed8;
     }
 
     .toggle-link {
       display: block;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 14px;
       color: var(--text-muted);
       font-size: 0.85rem;
       cursor: pointer;
       text-decoration: underline;
     }
 
-    .toggle-link:hover {
-      color: var(--text-light);
-    }
-
-    /* VISTA DE SESIÓN INICIADA */
+    /* VISTA PANEL DE USUARIO */
     .dashboard-view {
       display: none;
       text-align: center;
       background-color: var(--card-bg);
-      padding: 30px 20px;
+      padding: 24px;
       border-radius: 12px;
       max-width: 450px;
       width: 100%;
@@ -218,28 +197,21 @@
     }
 
     .dashboard-view h2 {
-      color: var(--success-color);
+      color: var(--success-green);
       margin-bottom: 10px;
     }
 
-    .dashboard-view p {
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-    }
-
-    .info-list {
+    .info-box {
       text-align: left;
       background: #0f172a;
-      padding: 15px;
+      padding: 14px;
       border-radius: 8px;
-      margin-bottom: 20px;
+      margin: 15px 0;
       font-size: 0.9rem;
     }
 
-    .info-list p {
+    .info-box p {
       margin-bottom: 8px;
-      color: var(--text-light);
     }
 
     .btn-logout {
@@ -247,27 +219,26 @@
       color: white;
     }
 
-    /* REQUISITOS Y BENEFICIOS */
-    .info-section {
-      max-width: 500px;
+    .info-benefits {
+      max-width: 450px;
       width: 100%;
-      margin-top: 30px;
+      margin-top: 25px;
       font-size: 0.85rem;
       color: var(--text-muted);
+    }
+
+    .info-benefits h3 {
+      color: var(--text-light);
+      margin-bottom: 8px;
       text-align: center;
     }
 
-    .info-section h3 {
-      color: var(--text-light);
-      margin-bottom: 10px;
+    .info-benefits ul {
+      list-style-type: none;
+      padding-left: 0;
     }
 
-    .info-section ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .info-section li {
+    .info-benefits li {
       margin-bottom: 6px;
     }
   </style>
@@ -275,33 +246,30 @@
 <body>
 
   <header>
-    <h1>Alistamiento Militar Caracas</h1>
+    <h1>Alistamiento Caracas</h1>
     <p>Proceso de Convocatoria y Registro de Alistados FANB</p>
   </header>
 
-  <!-- CARRUSEL DE IMÁGENES MILITARES -->
+  <!-- CARRUSEL DE DIAPOSITIVAS MILITARES -->
+  <!-- Coloca aquí en 'src' la ruta de tus imágenes locales (ej. assets/foto1.jpg) o URLs directas -->
   <div class="carousel-container">
     <div class="carousel-slide active">
-      <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80" alt="Instrucción Militar">
-      <div class="carousel-caption">Instrucción y Formación Profesional</div>
+      <img src="https://via.placeholder.com/600x350/1e293b/ffffff?text=Alistamiento+Militar+Caracas+1" alt="Diapositiva 1" class="slide-img">
     </div>
     <div class="carousel-slide">
-      <img src="https://images.unsplash.com/photo-1579912437766-78923055415d?auto=format&fit=crop&w=800&q=80" alt="Entrenamiento Militar">
-      <div class="carousel-caption">Disciplina, Lealtad y Honor</div>
+      <img src="https://via.placeholder.com/600x350/1b365d/ffffff?text=Alistamiento+Militar+Caracas+2" alt="Diapositiva 2" class="slide-img">
     </div>
     <div class="carousel-slide">
-      <img src="https://images.unsplash.com/photo-1580130775562-0ef92da028de?auto=format&fit=crop&w=800&q=80" alt="Servicio a la Patria">
-      <div class="carousel-caption">Sirve a la Patria en la ZODI Caracas</div>
+      <img src="https://via.placeholder.com/600x350/0f172a/ffffff?text=Alistamiento+Militar+Caracas+3" alt="Diapositiva 3" class="slide-img">
     </div>
   </div>
 
-  <!-- SECCIÓN DE FORMULARIOS -->
+  <!-- SECCIÓN DE ACCESO Y REGISTRO -->
   <div class="form-container" id="auth-box">
     
-    <!-- MENSAJES DE ESTADO -->
     <div id="alert-msg" class="alert"></div>
 
-    <!-- FORMULARIO DE INICIO DE SESIÓN -->
+    <!-- INICIO DE SESIÓN -->
     <form id="login-form">
       <h2>Iniciar Sesión</h2>
       <p class="subtitle">Accede con tu cuenta de alistado</p>
@@ -317,13 +285,13 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Ingresar al Sistema</button>
-      <span class="toggle-link" onclick="toggleAuthMode('register')">¿No tienes cuenta? Regístrate aquí</span>
+      <span class="toggle-link" onclick="switchForm('register')">¿No tienes cuenta? Regístrate aquí</span>
     </form>
 
-    <!-- FORMULARIO DE REGISTRO DE ALISTADO -->
+    <!-- REGISTRO DE ALISTADO -->
     <form id="register-form" style="display: none;">
       <h2>Registro de Alistado</h2>
-      <p class="subtitle">Ingresa tus datos para iniciar la inscripción</p>
+      <p class="subtitle">Ingresa tus datos para completar tu inscripción</p>
 
       <div class="form-group">
         <label for="reg-cedula">Cédula de Identidad</label>
@@ -331,7 +299,7 @@
       </div>
 
       <div class="form-group">
-        <label for="reg-fullname">Nombre Completo</label>
+        <label for="reg-fullname">Nombre y Apellido</label>
         <input type="text" id="reg-fullname" placeholder="Nombres y Apellidos" required>
       </div>
 
@@ -351,17 +319,17 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Registrar Alistado</button>
-      <span class="toggle-link" onclick="toggleAuthMode('login')">¿Ya tienes cuenta? Inicia Sesión</span>
+      <span class="toggle-link" onclick="switchForm('login')">¿Ya tienes cuenta? Inicia Sesión</span>
     </form>
 
   </div>
 
-  <!-- PANEL DE BIENVENIDA (USUARIO LOGUEADO) -->
+  <!-- PANEL PRINCIPAL TRAS INICIAR SESIÓN -->
   <div class="dashboard-view" id="dashboard-box">
-    <h2>¡Registro Confirmado!</h2>
-    <p>Bienvenido al Sistema de Alistamiento Militar Caracas.</p>
+    <h2>¡Alistado Registrado!</h2>
+    <p>Has ingresado exitosamente al sistema.</p>
     
-    <div class="info-list">
+    <div class="info-box">
       <p><strong>Cédula:</strong> <span id="user-cedula">-</span></p>
       <p><strong>Nombre:</strong> <span id="user-name">-</span></p>
       <p><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
@@ -371,46 +339,44 @@
     <button onclick="logout()" class="btn btn-logout">Cerrar Sesión</button>
   </div>
 
-  <!-- INFORMACIÓN ADICIONAL -->
-  <div class="info-section">
+  <div class="info-benefits">
     <h3>Beneficios del Contingente</h3>
     <ul>
-      <li>🎓 Oportunidades de estudio universitario y técnico.</li>
+      <li>🎓 Oportunidades de estudio universitario y formación técnica.</li>
       <li>🩺 Asistencia médica, odontológica y social integral.</li>
-      <li>🎖️ Posibilidad de hacer carrera dentro de la Fuerza Armada.</li>
+      <li>🎖️ Carrera y desarrollo dentro de la Fuerza Armada.</li>
     </ul>
   </div>
 
   <script>
-    // CONFIGURACIÓN DE SUPABASE
+    // PARAMETROS DE SUPABASE DE TU PROYECTO
     const SUPABASE_URL = 'https://hjvftsxciwmnbfqgkhpi.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqdmZ0c3hjaXdtbmJmcWdraHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTUzNjksImV4cCI6MjA1Nzg5MTM2OX0.J_M63b6knd-2C_-LwIuM4I8mP2d5w2-f-S6A2I0S6f4'; // Reemplazar si fuera necesario
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqdmZ0c3hjaXdtbmJmcWdraHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTUzNjksImV4cCI6MjA1Nzg5MTM2OX0.J_M63b6knd-2C_-LwIuM4I8mP2d5w2-f-S6A2I0S6f4';
     
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // LÓGICA DEL CARRUSEL DE IMÁGENES
+    // CONTROL DEL CARRUSEL
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-slide');
 
-    function nextSlide() {
+    function showNextSlide() {
       if (slides.length === 0) return;
       slides[currentSlide].classList.remove('active');
       currentSlide = (currentSlide + 1) % slides.length;
       slides[currentSlide].classList.add('active');
     }
-    setInterval(nextSlide, 3500);
+    setInterval(showNextSlide, 3500);
 
-    // ELEMENTOS DEL DOM
+    // INTERFAZ DE USUARIO
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const authBox = document.getElementById('auth-box');
     const dashboardBox = document.getElementById('dashboard-box');
     const alertMsg = document.getElementById('alert-msg');
 
-    // NAVEGACIÓN ENTRE INICIAR SESIÓN Y REGISTRO
-    function toggleAuthMode(mode) {
+    function switchForm(target) {
       hideAlert();
-      if (mode === 'register') {
+      if (target === 'register') {
         loginForm.style.display = 'none';
         registerForm.style.display = 'block';
       } else {
@@ -419,8 +385,8 @@
       }
     }
 
-    function showAlert(message, isError = true) {
-      alertMsg.textContent = message;
+    function showAlert(msg, isError = true) {
+      alertMsg.textContent = msg;
       alertMsg.className = `alert ${isError ? 'alert-error' : 'alert-success'}`;
       alertMsg.style.display = 'block';
     }
@@ -429,7 +395,7 @@
       alertMsg.style.display = 'none';
     }
 
-    // REGISTRO DE USUARIO
+    // REGISTRO DE ALISTADOS
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideAlert();
@@ -455,15 +421,11 @@
 
         if (error) throw error;
 
-        showAlert('¡Registro exitoso! Iniciando sesión...', false);
-        
-        // Si el usuario se crea y se confirma automáticamente
-        if (data.user) {
-          checkSession();
-        }
+        showAlert('Registro completado. Accediendo...', false);
+        checkUserSession();
 
       } catch (err) {
-        showAlert(err.message || 'Error al registrar alistado');
+        showAlert(err.message || 'Error durante el registro.');
       }
     });
 
@@ -483,25 +445,25 @@
 
         if (error) throw error;
 
-        checkSession();
+        checkUserSession();
 
       } catch (err) {
-        showAlert(err.message || 'Error al iniciar sesión');
+        showAlert(err.message || 'Credenciales inválidas.');
       }
     });
 
-    // VERIFICAR SESIÓN ACTIVA
-    async function checkSession() {
+    // REVISAR ESTADO DE LA SESIÓN
+    async function checkUserSession() {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
         const user = session.user;
-        const metadata = user.user_metadata || {};
+        const meta = user.user_metadata || {};
 
         document.getElementById('user-email').textContent = user.email || '-';
-        document.getElementById('user-cedula').textContent = metadata.cedula || 'No registrada';
-        document.getElementById('user-name').textContent = metadata.full_name || 'Alistado';
-        document.getElementById('user-phone').textContent = metadata.phone_number || 'No registrado';
+        document.getElementById('user-cedula').textContent = meta.cedula || 'No especificada';
+        document.getElementById('user-name').textContent = meta.full_name || 'Alistado';
+        document.getElementById('user-phone').textContent = meta.phone_number || 'No especificado';
 
         authBox.style.display = 'none';
         dashboardBox.style.display = 'block';
@@ -514,11 +476,11 @@
     // CERRAR SESIÓN
     async function logout() {
       await supabase.auth.signOut();
-      checkSession();
+      checkUserSession();
     }
 
-    // COMPROBAR SESIÓN AL CORTAR / CARGAR PÁGINA
-    checkSession();
+    // VERIFICAR AL CARGAR
+    checkUserSession();
   </script>
 </body>
 </html>
