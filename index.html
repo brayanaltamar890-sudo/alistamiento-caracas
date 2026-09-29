@@ -207,14 +207,13 @@
             object-fit: cover;
             flex-shrink: 0;
         }   
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <!-- Imagen Principal de la FANB -->
-          <!-- Carrusel de Imágenes -->
+        <!-- Carrusel de Imágenes -->
         <div class="carousel-container">
             <div class="carousel-slide">
                 <img src="https://hjvftsxciwmnbfqgkhpi.supabase.co/storage/v1/object/public/imagenes/Screenshot_20260929_013514_Chrome.jpg" alt="Imagen 1">
@@ -256,8 +255,8 @@
                     <input type="text" id="reg-name" placeholder="Nombre Completo" required>
                 </div>
                 <div class="form-group">
-                    <label>Número de Teléfono</label>
-                    <input type="tel" id="reg-phone" placeholder="04121234567" required>
+                    <label>Número de Teléfono *</label>
+                    <input type="tel" id="reg-phone" placeholder="04121234567" required minlength="10">
                 </div>
                 <div class="form-group">
                     <label>Correo Electrónico</label>
@@ -386,11 +385,17 @@
             e.preventDefault();
             hideAlert();
 
-            const email = document.getElementById('reg-email').value;
+            const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
-            const name = document.getElementById('reg-name').value;
-            const cedula = document.getElementById('reg-cedula').value;
-            const phone = document.getElementById('reg-phone').value;
+            const name = document.getElementById('reg-name').value.trim();
+            const cedula = document.getElementById('reg-cedula').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+
+            // Validación estricta del número de teléfono
+            if (!phone || phone.length < 10) {
+                showAlert("Por favor ingresa un número de teléfono válido (mínimo 10 dígitos).", 'error');
+                return;
+            }
 
             document.getElementById('btn-reg').innerText = "Procesando...";
 
@@ -454,7 +459,8 @@
             await _supabase.auth.signOut();
             location.reload();
         }
-     // Lógica para que el carrusel se mueva solo
+
+        // Lógica para que el carrusel se mueva solo
         const carouselSlide = document.querySelector('.carousel-slide');
         const images = document.querySelectorAll('.carousel-slide img');
 
