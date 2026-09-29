@@ -223,6 +223,10 @@
                     <input type="text" id="reg-name" placeholder="Nombre Completo" required>
                 </div>
                 <div class="form-group">
+                    <label>Número de Teléfono</label>
+                    <input type="tel" id="reg-phone" placeholder="04121234567" required>
+                </div>
+                <div class="form-group">
                     <label>Correo Electrónico</label>
                     <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
                 </div>
@@ -353,6 +357,7 @@
             const password = document.getElementById('reg-password').value;
             const name = document.getElementById('reg-name').value;
             const cedula = document.getElementById('reg-cedula').value;
+            const phone = document.getElementById('reg-phone').value;
 
             document.getElementById('btn-reg').innerText = "Procesando...";
 
@@ -362,7 +367,8 @@
                 options: {
                     data: {
                         full_name: name,
-                        cedula: cedula
+                        cedula: cedula,
+                        phone: phone
                     }
                 }
             });
