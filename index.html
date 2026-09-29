@@ -54,7 +54,7 @@
       font-size: 0.9rem;
     }
 
-    /* CARRUSEL TIPO DIAPOSITIVAS */
+    /* CONTENEDOR DE IMAGEN / DIAPOSITIVAS */
     .carousel-container {
       position: relative;
       width: 100%;
@@ -65,6 +65,7 @@
       border-radius: 12px;
       border: 2px solid #334155;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      background-color: #0f172a;
     }
 
     .carousel-slide {
@@ -87,7 +88,7 @@
       object-fit: cover;
     }
 
-    /* CONTENEDOR PRINCIPAL */
+    /* FORMULARIOS */
     .form-container {
       background-color: var(--card-bg);
       border: 1px solid #334155;
@@ -184,7 +185,7 @@
       text-decoration: underline;
     }
 
-    /* VISTA PANEL DE USUARIO */
+    /* VISTA DE ALISTADO LOGUEADO */
     .dashboard-view {
       display: none;
       text-align: center;
@@ -250,26 +251,19 @@
     <p>Proceso de Convocatoria y Registro de Alistados FANB</p>
   </header>
 
-  <!-- CARRUSEL DE DIAPOSITIVAS MILITARES -->
-  <!-- Coloca aquí en 'src' la ruta de tus imágenes locales (ej. assets/foto1.jpg) o URLs directas -->
+  <!-- SECCIÓN DE LA IMAGEN MILITAR -->
   <div class="carousel-container">
     <div class="carousel-slide active">
-      <img src="https://via.placeholder.com/600x350/1e293b/ffffff?text=Alistamiento+Militar+Caracas+1" alt="Diapositiva 1" class="slide-img">
-    </div>
-    <div class="carousel-slide">
-      <img src="https://via.placeholder.com/600x350/1b365d/ffffff?text=Alistamiento+Militar+Caracas+2" alt="Diapositiva 2" class="slide-img">
-    </div>
-    <div class="carousel-slide">
-      <img src="https://via.placeholder.com/600x350/0f172a/ffffff?text=Alistamiento+Militar+Caracas+3" alt="Diapositiva 3" class="slide-img">
+      <img src="assets/militar.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80';" alt="Alistamiento Militar FANB">
     </div>
   </div>
 
-  <!-- SECCIÓN DE ACCESO Y REGISTRO -->
+  <!-- SECCIÓN DE FORMULARIOS -->
   <div class="form-container" id="auth-box">
     
     <div id="alert-msg" class="alert"></div>
 
-    <!-- INICIO DE SESIÓN -->
+    <!-- INICIAR SESIÓN -->
     <form id="login-form">
       <h2>Iniciar Sesión</h2>
       <p class="subtitle">Accede con tu cuenta de alistado</p>
@@ -324,7 +318,7 @@
 
   </div>
 
-  <!-- PANEL PRINCIPAL TRAS INICIAR SESIÓN -->
+  <!-- PANEL PRINCIPAL (ALISTADO AUTENTICADO) -->
   <div class="dashboard-view" id="dashboard-box">
     <h2>¡Alistado Registrado!</h2>
     <p>Has ingresado exitosamente al sistema.</p>
@@ -349,25 +343,11 @@
   </div>
 
   <script>
-    // PARAMETROS DE SUPABASE DE TU PROYECTO
     const SUPABASE_URL = 'https://hjvftsxciwmnbfqgkhpi.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqdmZ0c3hjaXdtbmJmcWdraHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMTUzNjksImV4cCI6MjA1Nzg5MTM2OX0.J_M63b6knd-2C_-LwIuM4I8mP2d5w2-f-S6A2I0S6f4';
     
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // CONTROL DEL CARRUSEL
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-
-    function showNextSlide() {
-      if (slides.length === 0) return;
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-    setInterval(showNextSlide, 3500);
-
-    // INTERFAZ DE USUARIO
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const authBox = document.getElementById('auth-box');
@@ -479,7 +459,6 @@
       checkUserSession();
     }
 
-    // VERIFICAR AL CARGAR
     checkUserSession();
   </script>
 </body>
