@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Aspirantes - Alistamiento Militar Caracas</title>
+    <!-- Carga de la librería oficial de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #1d4ed8;
@@ -54,6 +56,7 @@
             justify-content: center;
             font-weight: bold;
             color: var(--primary);
+            font-size: 18px;
         }
 
         .brand-header h1 {
@@ -133,19 +136,46 @@
         .hidden {
             display: none;
         }
+
+        .alert {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
     </style>
 </head>
 <body>
 
     <div class="auth-card">
         <div class="brand-header">
-            <div class="brand-logo">FANB</div>
+            <div class="brand-logo">UMBV</div>
             <h1 id="form-title">Iniciar Sesión</h1>
             <p id="form-subtitle">Bienvenido al sistema de registro de aspirantes</p>
         </div>
 
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Vista de Sesión Iniciada / Dashboard de Aspirante -->
+        <div id="user-dashboard" class="hidden">
+            <h2 style="color: #0f172a; font-size: 18px; margin-bottom: 8px;">¡Sesión Iniciada con Éxito!</h2>
+            <p id="user-info" style="font-size: 14px; color: #64748b; margin-bottom: 20px;"></p>
+            <button onclick="logout()" class="btn-toggle" style="background: #ef4444; color: white; border: none;">Cerrar Sesión</button>
+        </div>
+
         <!-- Formulario de Iniciar Sesión -->
-        <form id="login-form">
+        <form id="login-form" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>Correo Electrónico</label>
                 <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
@@ -154,11 +184,11 @@
                 <label>Contraseña</label>
                 <input type="password" id="login-password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn-submit">Ingresar al Sistema</button>
+            <button type="submit" class="btn-submit" id="btn-login">Ingresar al Sistema</button>
         </form>
 
         <!-- Formulario de Registro -->
-        <form id="register-form" class="hidden">
+        <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
             <div class="form-group">
                 <label>Cédula de Identidad</label>
                 <input type="text" id="reg-cedula" placeholder="V-12345678" required>
@@ -175,20 +205,37 @@
                 <label>Contraseña</label>
                 <input type="password" id="reg-password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn-submit">Crear Cuenta de Aspirante</button>
+            <button type="submit" class="btn-submit" id="btn-reg">Crear Cuenta de Aspirante</button>
         </form>
 
-        <div class="toggle-container">
+        <div class="toggle-container" id="toggle-box">
             <p id="toggle-text" style="font-size: 13px; color: #64748b;">¿Eres un nuevo aspirante?</p>
             <button type="button" class="btn-toggle" id="btn-switch" onclick="toggleAuth()">Crear Cuenta de Aspirante</button>
         </div>
     </div>
 
     <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = "https://hjvftsxciwmnbfqgkhpi.supabase.co";
+        const SUPABASE_KEY = "Sb_publishable_pr45DPbI4ylLwW9xO20aaw_eYufxpOw";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let isLogin = true;
+
+        function showAlert(message, type) {
+            const box = document.getElementById('alert-box');
+            box.innerText = message;
+            box.className = `alert alert-${type}`;
+            box.style.display = 'block';
+        }
+
+        function hideAlert() {
+            document.getElementById('alert-box').style.display = 'none';
+        }
 
         function toggleAuth() {
             isLogin = !isLogin;
+            hideAlert();
             const loginForm = document.getElementById('login-form');
             const registerForm = document.getElementById('register-form');
             const title = document.getElementById('form-title');
@@ -205,6 +252,79 @@
                 title.innerText = "Registro de Aspirante";
                 switchBtn.innerText = "Ya tengo cuenta (Iniciar Sesión)";
             }
+        }
+
+        // Registro de usuario en Supabase
+        async function handleRegister(e) {
+            e.preventDefault();
+            hideAlert();
+
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const name = document.getElementById('reg-name').value;
+            const cedula = document.getElementById('reg-cedula').value;
+
+            document.getElementById('btn-reg').innerText = "Procesando...";
+
+            const { data, error } = await _supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        full_name: name,
+                        cedula: cedula
+                    }
+                }
+            });
+
+            document.getElementById('btn-reg').innerText = "Crear Cuenta de Aspirante";
+
+            if (error) {
+                showAlert("Error en registro: " + error.message, 'error');
+            } else {
+                showAlert("¡Cuenta creada correctamente! Si se requiere verificación, revisa tu correo.", 'success');
+            }
+        }
+
+        // Inicio de sesión
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideAlert();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            document.getElementById('btn-login').innerText = "Verificando...";
+
+            const { data, error } = await _supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            document.getElementById('btn-login').innerText = "Ingresar al Sistema";
+
+            if (error) {
+                showAlert("Error de acceso: " + error.message, 'error');
+            } else {
+                showDashboard(data.user);
+            }
+        }
+
+        function showDashboard(user) {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('toggle-box').classList.add('hidden');
+            document.getElementById('form-title').innerText = "Panel de Aspirante";
+            document.getElementById('form-subtitle').innerText = "Bienvenido al sistema";
+            
+            const userName = user.user_metadata.full_name || user.email;
+            document.getElementById('user-info').innerText = `Hola, ${userName}. Tu sesión está activa.`;
+            document.getElementById('user-dashboard').classList.remove('hidden');
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            location.reload();
         }
     </script>
 </body>
